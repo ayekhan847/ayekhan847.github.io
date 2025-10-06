@@ -9,10 +9,84 @@
     <link href="style.css" rel="stylesheet" type="text/css" />
   </head>
   <body>
-    <h1>Example Student's Assignment 1!</h1>
+    <h1>Assignment 1: Blink!</h1>
     <div class="header">
-      <img src="red-panda.jpg" />
-      <p>Here is all the documentation for assignment 1!</p>
+      <div>
+        <img src="a1blink.jpg" />
+        <p>Here is the picture of my circuit.</p>
+      </div>
+      <div>
+        <img src="schematic.jpg" />
+        <p>Here is the picture of my schematic.</p>
+      </div>
+      <div>
+        <img src="calculations.jpg" />
+        <p>I calculated that each resistor for the red LED has to have at least 160 Ohms. I rounded up 
+        when choosing which resistor to use from the ones I had, and used 220 Ohm resistors for each LED.
+      </p>
+      </div>
+    </div>
+
+
+    <h2>Firmware-Code from Arduino IDE</h2>
+    <pre><code>
+      /*Turns ons 3 LEDS one after each other, each turning on for 1 second before turning off. 
+        This is adapted from the example code in the public domain.
+      */
+      // the setup function runs once when you press reset or power the board
+      void setup() {
+        // initialize digital pin LED_BUILTIN as an output.
+        pinMode(13, OUTPUT);
+        //initialize the pin 12 as another output
+        pinMode(12, OUTPUT);
+        //initialize the pin 11 as the last output
+        pinMode(11, OUTPUT);
+      }
+
+      // the loop function runs over and over again forever
+      void loop() {
+        digitalWrite(13, HIGH);  // turn the first LED on
+        digitalWrite(12, LOW); // the second LED remains off
+        digitalWrite(11, LOW); // the third LED turns off
+        delay(1000);                      // wait for a second
+        digitalWrite(13, LOW);   // turn the first LED off
+        digitalWrite(12, HIGH); // the second LED turns on
+        digitalWrite(11, LOW); // the third LED remains off
+        delay(1000);                      // wait for a second
+        digitalWrite(13, LOW);   // first LED remains off 
+        digitalWrite(12, LOW);  // the second LED turns off
+        digitalWrite(11, HIGH); // the third LED turns on
+        delay(1000); //wait for a second
+      }
+    </code></pre>
+
+     <div class="assignment">
+      <h2>Additional Questions</h2>
+
+      <h3>Question 1</h3>
+      <p>Here is a graph with X axis is time and Y axis is voltage for each of the 3 LEDs:  
+         <img src="graph.jpg"/></p>
+
+      <h3>Question 2</h3>
+      <p>Reading the Arduino Uno Rev3 tech specs, I see that the current per I/O is a recommended 20mA. 
+        However, going into the microcontroller (ATmega328P) specs, I see that the chip wide limit is 200mA. 
+        Assuming that I am using pins 2-13 (as 0,1 are only for RX and TX), and 12 pins at 20mA, 
+        that makes the total current to be 240mA, this is way higher than the current limit and would be too high. 
+        If I want to stay at 200mA for the entire chip, then the max I could go is 10 pins at each 20mA. 
+        To be safe, I would probably do 9 pins to make sure I don’t go over the 200mA maximum.  
+        This would result in a 180mA current draw. </p>
+
+      <h3>Question 4</h3>
+      <p>Instead of 1000 ms in between, I would bring it all the way down to 1ms. 
+        I tried it with 15ms and I couldn’t see the blink in between.  </p>
+
+      <h3>Question 5</h3>
+      <p>I searched Google for the specs sheet for the Arduino Uno Rev3 and it gave me the chip-wide limit. 
+        I still went through the MegaAVR Data Sheet which had many pages and it took me a while to find the 
+        Electrical Characteristics (on page 308). I found that the AI summary on the top of Google gave me the 200 Current Vcc 
+        and GND Pins limit way faster than searching for it through the pages. At one point I thought I was overthinking question 2,
+         and it was just asking for the maximum current that could flow, excluding the point that the circuit board might break, 
+         but I still took the practical route and realistic answer. </p>
     </div>
   </body>
 </html>
