@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, maximum-scale=1.0" />
+
+    <title>Example Student's HCDE 439 Physical Computing Page!</title>
+
+    <link href="style.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body>
+    <h1>Assignment 2: Fade!</h1>
+    <div class="header">
+      <div>
+        <img src="a3inputoutput.jpg" />
+        <p>Here is the picture of my circuit.</p>
+      </div>
+      <div>
+        <img src="ledindark.gif" />
+        <p>Here is the gif of my circuit when the photosensor is covered and the green LED dims.</p>
+      </div>
+      <div>
+        <img src="ledinlight.gif" />
+        <p>Here is the gif of my circuit when the photosensor is exposed to more light and the yellow LED dims.</p>
+      </div>
+      <div>
+        <img src="a3schematic.jpg" />
+        <p>Here is the picture of my schematic.</p>
+      </div>
+      <div>
+        <img src="a3calculations.jpg" />
+        <p>I calculated that each resistor for the red, yellow, and green LED have to have at least 160 Ohms. I rounded up 
+        when choosing which resistor to use from the ones I had, and used 220 Ohm resistors for each LED.
+      </p>
+      </div>
+    </div>
+
+
+    <h2>Firmware-Code from Arduino IDE</h2>
+    <pre><code>
+      
+    /*This is Assignment 3, using a voltage divider, photosensor, and LEDs to control the light on the LED
+    Referenced the example code is in the public domain.
+
+    https://docs.arduino.cc/built-in-examples/analog/AnalogInOutSerial */
+
+    const int sensor_pin = A0; //adding an analog pin for the voltage divider 
+    const int light_led_pin = 9; //the pin that will hold the LED for which more light will make dim
+    const int covered_led_pin = 10; //the pin that will hold the LED for which covering the sensor makes dim
+    const int adc_min = 250; //got the min value of adc by testing the range with the sensor
+    const int adc_max = 860; //got the max value of adc by testing the range with the sensor
+    const int middle_threshold = 500; //chose the middle value to keep as the cove
+
+    void setup() {
+    Serial.begin(9600); //intializing to set up the serial monitor using the baud value on screen
+    pinMode(light_led_pin, OUTPUT); //setting pin 9 as output
+    pinMode(covered_led_pin, OUTPUT); //setting pin 10 as output
+    }
+
+    void loop() {
+    int sensor_value = analogRead(sensor_pin); //going to read the voltage from sensor pon between 0-5V as integers 0-1230
+
+    if (sensor_value < adc_min) sensor_value = adc_min; //keeps the measured value from sensor to not go below the minimum adc value
+    if (sensor_value > adc_max) sensor_value = adc_max; //keeps the measured value from sensor to not go above the minimum adc value
+
+
+    int light_pwm   = map(sensor_value, adc_min, adc_max, 0, 255); //mapping the sensorvalues to 0-255 (PWM)
+    int covered_pwm = map(sensor_value, adc_min, adc_max, 255, 0); //mapping the sensorvalues to 255-0 (PWM)
+
+    analogWrite(light_led_pin, light_pwm); //using the PWM range for the lighted LED
+    analogWrite(covered_led_pin, covered_pwm); //using the PWM range for the covered LED
+
+    if (sensor_value < middle_threshold) { //using this if statment to print out if the sensor is covered vs. lit up based on medium value pf ADC
+        Serial.print("Covered Mode → "); //will print if it's covered
+    } else {
+        Serial.print("Light Mode → "); //will print if it's shown light
+    }
+    Serial.print("adc="); //printing the adc number
+    Serial.print(sensor_value); //the sensor value 
+    Serial.print("  light_pwm="); //prints the light PWM
+    Serial.print(light_pwm); //the value
+    Serial.print("  covered_pwm="); //prints the covered PWM
+    Serial.println(covered_pwm); //the value
+
+    delay(200); //pause to read the output
+    }
+
+    </code></pre>
+
+     <div class="assignment">
+      <h2>Additional Questions</h2>
+
+      <h3>Question 1</h3>
+      <p>Here is a graph with X axis is time and Y axis is voltage for an LED with the three analog writes:
+         <img src="graph2.jpg"/></p>
+
+      <h3>Question 2</h3>
+      <p>My circuit has the LEDs drawing current, and the green LED is on for most of the time. It only turns
+        off if you press the button. So assuming that the green LED will draw most of the power (because the fade sequence is
+        so short), I use the 1.8 voltage drop to calculate the current. Since current = (5.0 - 1.8V)/220 Ohms, my current in mA is 14.5 mA 
+        Since we are given the 1200 mAh battery capcacity, to cacluate batterlife we divide by the current of 14.5 mA, and we get
+      82.76 hours. This is approximately how long my circuit would run</p>
+
+      <h3>Question 3</h3>
+      <p>Using information I found on ChatGPT (since my multimeter wasn't working), an average voltage rating for the green led of
+         2.1 to 2.3 correlates to a true green while other types range from 2.8 to 3.2. Since the data sheet has told me 1.8 V drop, and based
+        off the color of my LED, I'm assuming that we have the true green LED. I'll be asking for a new multimeter next class! </p>
+
+      <h3>Question 4</h3>
+      <p>I searched Google for the formula for calcuting battery life and help me with my math calculations.
+        My multimeter was not working, so after trying for one hour, i decided to just use an average led voltage for my conclusion 
+        from chatGPT. I asked it what the average was and it told me between 2.1-2.3 V for green LED. </p>
+    </div>
+  </body>
+</html>
