@@ -9,7 +9,7 @@
     <link href="style.css" rel="stylesheet" type="text/css" />
   </head>
   <body>
-    <h1>Assignment 2: Fade!</h1>
+    <h1>Assignment 3:Input Output!</h1>
     <div class="header">
       <div>
         <img src="a3inputoutput.jpg" />
@@ -91,25 +91,20 @@
       <h2>Additional Questions</h2>
 
       <h3>Question 1</h3>
-      <p>Here is a graph with X axis is time and Y axis is voltage for an LED with the three analog writes:
-         <img src="graph2.jpg"/></p>
+      <p>Yes in the voltage divider, the variable resistor can be either R1 or R2. The only difference is that it changes the relationship
+        between the light and the voltage. If R1 is the variable resistor, then the output voltage becomes higher in light and lower
+        in the dark. If R2 is the variable resistor, then the output voltage becomes lower in light and higher in the dark.
+        <img src="a3q1calculations.jpg"/></p>
 
       <h3>Question 2</h3>
-      <p>My circuit has the LEDs drawing current, and the green LED is on for most of the time. It only turns
-        off if you press the button. So assuming that the green LED will draw most of the power (because the fade sequence is
-        so short), I use the 1.8 voltage drop to calculate the current. Since current = (5.0 - 1.8V)/220 Ohms, my current in mA is 14.5 mA 
-        Since we are given the 1200 mAh battery capcacity, to cacluate batterlife we divide by the current of 14.5 mA, and we get
-      82.76 hours. This is approximately how long my circuit would run</p>
+      <p>This is the graph of the gif when i cover my sensor and the green LED dims. 
+      <img src="a3q2graph.jpg"/></p>
 
       <h3>Question 3</h3>
-      <p>Using information I found on ChatGPT (since my multimeter wasn't working), an average voltage rating for the green led of
-         2.1 to 2.3 correlates to a true green while other types range from 2.8 to 3.2. Since the data sheet has told me 1.8 V drop, and based
-        off the color of my LED, I'm assuming that we have the true green LED. I'll be asking for a new multimeter next class! </p>
+      <p>Essentially the mV per unit rate would become smaller, which means the sensor becomes more sensitive to the light. Even
+        the slightes change in light would cause a change in the voltage output. Here is the calculations for calculating the analogRead rate
+        <img src="a3q3calculations.jpg"/>< </p>
 
-      <h3>Question 4</h3>
-      <p>I searched Google for the formula for calcuting battery life and help me with my math calculations.
-        My multimeter was not working, so after trying for one hour, i decided to just use an average led voltage for my conclusion 
-        from chatGPT. I asked it what the average was and it told me between 2.1-2.3 V for green LED. </p>
     </div>
   </body>
 </html>
