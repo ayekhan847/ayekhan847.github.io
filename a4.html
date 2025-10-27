@@ -33,7 +33,7 @@
     <pre><code>
         //librairies
         #include <CapacitiveSensor.h>  // adding the library for the capactive sensor
-        #include <Servo.h>              // adding the library for the servo motor
+        #include <Servo.h> // adding the library for the servo motor
 
         //objects
         CapacitiveSensor cs_4_2 = CapacitiveSensor(4,2); // the capacitive sensor object using pin 4 and pin 2, for sending and recieving respectively. 
@@ -66,19 +66,37 @@
       <h2>Additional Questions</h2>
 
       <h3>Question 1</h3>
-      <p>Yes in the voltage divider, the variable resistor can be either R1 or R2. The only difference is that it changes the relationship
-        between the light and the voltage. If R1 is the variable resistor, then the output voltage becomes higher in light and lower
-        in the dark. If R2 is the variable resistor, then the output voltage becomes lower in light and higher in the dark.
-        <img src="a3q1calculations.jpg"/></p>
+      <p>The high time in every pulse cycle will increase as the angle increases each time. It will still reach 5V.
+        <img src="a4q1.jpg"/></p>
 
       <h3>Question 2</h3>
-      <p>This is the graph of the gif when i cover my sensor and the green LED dims. 
-      <img src="a3q2graph.jpg"/></p>
+      <p> 
+        Since we do the readings multiple times for the capacitive sensor, the values are averaged to give a smoother reading. But, if there was
+        an erratic reading, it's impact wouln't be that larger as it would be averaged out. But to be extra safe, we could filter out any readings that
+        are way out of range, and contrain the readings. 
+        Example pseudo code:
+        Get the reading from the sensor
+        If the reading is outside of the range that we expect (like greater than 2000)
+          use the previous reading
+        Else
+          Use the reading
+        If the reading is very different from the previous reading (like greater than 500)
+          use the previous reading instead
+        Else
+          Use the reading
+        remember it for the next reading
+        </p>
 
       <h3>Question 3</h3>
-      <p>Essentially the mV per unit rate would become smaller, which means the sensor becomes more sensitive to the light. Even
-        the slightes change in light would cause a change in the voltage output. Here is the calculations for calculating the analogRead rate
-        <img src="a3q3calculations.jpg"/></p>
+      <p>We already take 30 tests inside one function that smoothes it up. But 
+        since the +/- 10% noise is happening reading to reading, we can then do another average.
+        Here is how the psuedo code would look like:
+        initialize the total varabile to 0
+        get one reading using capactiveSensor(30)
+        add this reading to the total
+        divide the total by the number of readings taken
+        use this final average reading for the mapping to servo angle
+      </p>
 
     </div>
   </body>
