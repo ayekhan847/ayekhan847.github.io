@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, maximum-scale=1.0" />
+
+    <title>Example Student's HCDE 439 Physical Computing Page!</title>
+
+    <link href="style.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body>
+    <h1>Assignment 4: Libraries!</h1>
+    <div class="header">
+      <div>
+        <img src="a4libraries.jpg" />
+        <p>Here is the picture of my circuit.</p>
+      </div>
+      <div>
+        <img src="a4.gif" />
+        <p>Here is the gif of my circuit when capactive sensor is touched and moves the servo motor</p>
+      </div>
+      <div>
+        <img src="a4schematic.jpg" />
+        <p>Here is the picture of my schematic.</p>
+      </div>
+      <div>
+        <p>The calculations for the 1M resistor between the pins for the capactive sensor was given to us in class. 
+      </p>
+      </div>
+    </div>
+
+    <h2>Firmware-Code from Arduino IDE</h2>
+    <pre><code>
+        //librairies
+        #include <CapacitiveSensor.h>  // adding the library for the capactive sensor
+        #include <Servo.h>              // adding the library for the servo motor
+
+        //objects
+        CapacitiveSensor cs_4_2 = CapacitiveSensor(4,2); // the capacitive sensor object using pin 4 and pin 2, for sending and recieving respectively. 
+        Servo myservo; // the servo object to move the fan motor
+        long totalTouch = 0; // variable that stores the touch amount
+        int pos = 0; // variable that stores the angle 
+
+        void setup() {
+        cs_4_2.set_CS_AutocaL_Millis(0xFFFFFFFF);  // turns off the automatic calibration, taken from example
+        Serial.begin(9600);  // to start the serial monitor
+        myservo.attach(9); // attaching the servo on to pin 9 of the myservo object
+        }
+
+        void loop() {
+        totalTouch = cs_4_2.capacitiveSensor(30); // RC timing test 30 times to get a smooth reading
+
+        // printing the reading to the Serial Monitor
+        Serial.print("CapSense Value: ");
+        Serial.println(totalTouch);
+
+        pos = map(totalTouch, 0, 2000, 0, 180);  // mapping the touch value to a servo angle (tough to angle between 0-180)
+        pos = constrain(pos, 0, 180); // making sure that if there is a higher or lower touch value, it doesn't go out of bound
+        
+        myservo.write(pos); // writing and moving the servo to the angle  
+        delay(15); // pause in between
+        }
+    </code></pre>
+
+     <div class="assignment">
+      <h2>Additional Questions</h2>
+
+      <h3>Question 1</h3>
+      <p>Yes in the voltage divider, the variable resistor can be either R1 or R2. The only difference is that it changes the relationship
+        between the light and the voltage. If R1 is the variable resistor, then the output voltage becomes higher in light and lower
+        in the dark. If R2 is the variable resistor, then the output voltage becomes lower in light and higher in the dark.
+        <img src="a3q1calculations.jpg"/></p>
+
+      <h3>Question 2</h3>
+      <p>This is the graph of the gif when i cover my sensor and the green LED dims. 
+      <img src="a3q2graph.jpg"/></p>
+
+      <h3>Question 3</h3>
+      <p>Essentially the mV per unit rate would become smaller, which means the sensor becomes more sensitive to the light. Even
+        the slightes change in light would cause a change in the voltage output. Here is the calculations for calculating the analogRead rate
+        <img src="a3q3calculations.jpg"/></p>
+
+    </div>
+  </body>
+</html>
