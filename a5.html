@@ -75,36 +75,49 @@
       <h2>Additional Questions</h2>
 
       <h3>Question 1</h3>
-      <p>The high time in every pulse cycle will increase as the angle increases each time. It will still reach 5V.
-        <img src="a4q1.jpg"/></p>
+      <p>According to the datasheet, the max current would be 37.2A between pins 2 and 3 of the MOSFET.
+        <img src="a5q1.jpg"/></p>
 
       <h3>Question 2</h3>
       <p> 
-        Since we do the readings multiple times for the capacitive sensor, the values are averaged to give a smoother reading. But, if there was
-        an erratic reading, it's impact wouln't be that larger as it would be averaged out. But to be extra safe, we could filter out any readings that
-        are way out of range, and contrain the readings. 
-        Example pseudo code:
-        Get the reading from the sensor
-        If the reading is outside of the range that we expect (like greater than 2000)
-          use the previous reading
-        Else
-          Use the reading
-        If the reading is very different from the previous reading (like greater than 500)
-          use the previous reading instead
-        Else
-          Use the reading
-        remember it for the next reading
+        This is my schematic showing all the parts needed for this DC motor circuit.
+        <img src="a5q2.jpg"/></p>
+        The parts include:
+        The Arduino Uno Board:
+        https://docs.arduino.cc/resources/datasheets/A000066-datasheet.pdf
+        The N-MOSFEt Transistor:
+        https://cdn.sparkfun.com/assets/4/1/1/8/0/RFP30N06LE.pdf
+        The Flyback Diode:
+        https://components101.com/sites/default/files/component_datasheet/1N4001.pdf
+        The Capacitor, since the circuits maximum votage is 12V, I sited a 25V capacitor that gives a safe margin:
+        https://www.digikey.com/en/products/detail/panasonic-electronic-components/EEU-FR1E221/9921023
+        The 12V Power Source:
+        https://www.farnell.com/datasheets/2720924.pdf
+        The 3-6V DC Motor:
+        https://product.mabuchi-motor.com/detail.html?id=9
         </p>
 
       <h3>Question 3</h3>
-      <p>We already take 30 tests inside one function that smoothes it up. But 
-        since the +/- 10% noise is happening reading to reading, we can then do another average.
-        Here is how the psuedo code would look like:
-        initialize the total varabile to 0
-        get one reading using capactiveSensor(30)
-        add this reading to the total
-        divide the total by the number of readings taken
-        use this final average reading for the mapping to servo angle
+      <p>Used this website for reference: https://lastminuteengineers.com/l293d-dc-motor-arduino-tutorial/
+        <img src="a5q3.jpg"/></p>
+        Here is my pseudocode for how I would set this up:
+        Set up pins for both motor A and motor B
+        //Start with both motors forward:
+        Set Motor A forward
+        Set Motor B forward
+        Delay
+        //Then both motors backward:
+        Set Motor A backward
+        Set Motor B backward
+        Delay
+        //Then Motor A forward, Motor B backward to turn right
+        Set Motor A forward
+        Set Motor B backward
+        Delay
+        //Then Motor A backward, Motor B forward to turn left
+        Set Motor A backward
+        Set Motor B forward
+        Delay
       </p>
 
     </div>
