@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, maximum-scale=1.0" />
+
+    <title>Example Student's HCDE 439 Physical Computing Page!</title>
+
+    <link href="style.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body>
+    <h1>Assignment 4: Libraries!</h1>
+    <div class="header">
+      <div>
+        <img src="a4libraries.jpg" />
+        <p>Here is the picture of my circuit.</p>
+      </div>
+      <div>
+        <img src="a4.gif" />
+        <p>Here is the gif of my circuit when capactive sensor is touched and moves the servo motor</p>
+      </div>
+      <div>
+        <img src="a4schematic.jpg" />
+        <p>Here is the picture of my schematic.</p>
+      </div>
+      <div>
+        <p>The calculations for the 1M resistor between the pins for the capactive sensor was given to us in class. 
+      </p>
+      </div>
+    </div>
+
+    <h2>Firmware-Code from Arduino IDE</h2>
+    <pre><code>
+        //librairies
+        #include <CapacitiveSensor.h>  // adding the library for the capactive sensor
+        #include <Servo.h> // adding the library for the servo motor
+
+        //objects
+        CapacitiveSensor cs_4_2 = CapacitiveSensor(4,2); // the capacitive sensor object using pin 4 and pin 2, for sending and recieving respectively. 
+        Servo myservo; // the servo object to move the fan motor
+        long totalTouch = 0; // variable that stores the touch amount
+        int pos = 0; // variable that stores the angle 
+
+        void setup() {
+        cs_4_2.set_CS_AutocaL_Millis(0xFFFFFFFF);  // turns off the automatic calibration, taken from example
+        Serial.begin(9600);  // to start the serial monitor
+        myservo.attach(9); // attaching the servo on to pin 9 of the myservo object
+        }
+
+        void loop() {
+        totalTouch = cs_4_2.capacitiveSensor(30); // RC timing test 30 times to get a smooth reading
+
+        // printing the reading to the Serial Monitor
+        Serial.print("CapSense Value: ");
+        Serial.println(totalTouch);
+
+        pos = map(totalTouch, 0, 2000, 0, 180);  // mapping the touch value to a servo angle (tough to angle between 0-180)
+        pos = constrain(pos, 0, 180); // making sure that if there is a higher or lower touch value, it doesn't go out of bound
+        
+        myservo.write(pos); // writing and moving the servo to the angle  
+        delay(15); // pause in between
+        }
+    </code></pre>
+
+     <div class="assignment">
+      <h2>Additional Questions</h2>
+
+      <h3>Question 1</h3>
+      <p>The high time in every pulse cycle will increase as the angle increases each time. It will still reach 5V.
+        <img src="a4q1.jpg"/></p>
+
+      <h3>Question 2</h3>
+      <p> 
+        Since we do the readings multiple times for the capacitive sensor, the values are averaged to give a smoother reading. But, if there was
+        an erratic reading, it's impact wouln't be that larger as it would be averaged out. But to be extra safe, we could filter out any readings that
+        are way out of range, and contrain the readings. 
+        Example pseudo code:
+        Get the reading from the sensor
+        If the reading is outside of the range that we expect (like greater than 2000)
+          use the previous reading
+        Else
+          Use the reading
+        If the reading is very different from the previous reading (like greater than 500)
+          use the previous reading instead
+        Else
+          Use the reading
+        remember it for the next reading
+        </p>
+
+      <h3>Question 3</h3>
+      <p>We already take 30 tests inside one function that smoothes it up. But 
+        since the +/- 10% noise is happening reading to reading, we can then do another average.
+        Here is how the psuedo code would look like:
+        initialize the total varabile to 0
+        get one reading using capactiveSensor(30)
+        add this reading to the total
+        divide the total by the number of readings taken
+        use this final average reading for the mapping to servo angle
+      </p>
+
+    </div>
+  </body>
+</html>
