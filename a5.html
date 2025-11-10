@@ -9,57 +9,66 @@
     <link href="style.css" rel="stylesheet" type="text/css" />
   </head>
   <body>
-    <h1>Assignment 4: Libraries!</h1>
-    <div class="header">
+    <h1>Assignment 5: Higher Voltage and Transistors!</h1>
+    <div class="assignment">
       <div>
-        <img src="a4libraries.jpg" />
+        <img src="a5highervoltage.jpg" />
         <p>Here is the picture of my circuit.</p>
       </div>
       <div>
-        <img src="a4.gif" />
-        <p>Here is the gif of my circuit when capactive sensor is touched and moves the servo motor</p>
+        <img src="a5.gif" />
+        <p>Here is the gif of my circuit when I place my hand in front of the ultrasonic sensor</p>
       </div>
       <div>
-        <img src="a4schematic.jpg" />
+        <img src="a5schematic.jpg" />
         <p>Here is the picture of my schematic.</p>
-      </div>
-      <div>
-        <p>The calculations for the 1M resistor between the pins for the capactive sensor was given to us in class. 
-      </p>
       </div>
     </div>
 
     <h2>Firmware-Code from Arduino IDE</h2>
     <pre><code>
-        //librairies
-        #include <CapacitiveSensor.h>  // adding the library for the capactive sensor
-        #include <Servo.h> // adding the library for the servo motor
+    //This code is to control the ouptut of a higher voltage device (LED Strip) using an ultrasonic motor
+    //Used references from: https://projecthub.arduino.cc/Isaac100/getting-started-with-the-hc-sr04-ultrasonic-sensor-7cabe1
 
-        //objects
-        CapacitiveSensor cs_4_2 = CapacitiveSensor(4,2); // the capacitive sensor object using pin 4 and pin 2, for sending and recieving respectively. 
-        Servo myservo; // the servo object to move the fan motor
-        long totalTouch = 0; // variable that stores the touch amount
-        int pos = 0; // variable that stores the angle 
 
-        void setup() {
-        cs_4_2.set_CS_AutocaL_Millis(0xFFFFFFFF);  // turns off the automatic calibration, taken from example
-        Serial.begin(9600);  // to start the serial monitor
-        myservo.attach(9); // attaching the servo on to pin 9 of the myservo object
-        }
+    #define led_pin 9 // defining the the MOSFET gate pin
+    #define trig_pin 6   // defining the 6 pin for the ultrasonic trigger
+    #define echo_pin 7   // defining the 7 pin from the ultrasonic echo
 
-        void loop() {
-        totalTouch = cs_4_2.capacitiveSensor(30); // RC timing test 30 times to get a smooth reading
+    void setup() {
+    Serial.begin(9600);  //intializing to set up the serial monitor using the baud value on screen
+    pinMode(trig_pin, OUTPUT); //setting the trigger pin as an output
+    pinMode(echo_pin, INPUT); //setting the echo pin as an input
+    pinMode(led_pin, OUTPUT); //setting the led pin as an output
 
-        // printing the reading to the Serial Monitor
-        Serial.print("CapSense Value: ");
-        Serial.println(totalTouch);
+    analogWrite(led_pin, 0);  // the LED strip starting as off
+    }
 
-        pos = map(totalTouch, 0, 2000, 0, 180);  // mapping the touch value to a servo angle (tough to angle between 0-180)
-        pos = constrain(pos, 0, 180); // making sure that if there is a higher or lower touch value, it doesn't go out of bound
-        
-        myservo.write(pos); // writing and moving the servo to the angle  
-        delay(15); // pause in between
-        }
+    void loop() {
+    //Trigger the ultrasonic sensor
+    digitalWrite(trig_pin, LOW);   //Starting with low
+    delayMicroseconds(2); //waiting 2 microseconds
+    digitalWrite(trig_pin, HIGH);  // pulsing the trigger pin
+    delayMicroseconds(10); //waiting 10 microseconds
+    digitalWrite(trig_pin, LOW); //turning it back to low
+
+
+    long duration = pulseIn(echo_pin, HIGH, 30000); //reading and cutoff echo after 30000 microseconds
+    float distance_cm = duration * 0.034 / 2.0; //using the speed = distance/time equation and using speed of sounds in centimeters per micorsecond as 0.034 cm/µs
+
+    distance_cm = constrain(distance_cm, 5, 150); // Making sure the range is contrained between 5 and 250 cm
+    int brightness = map((int)distance_cm, 5, 150, 255, 0);  //Mapping this input distance to LED brightness
+
+    analogWrite(led_pin, brightness); //writing this value to the pwn pin to control LED brightness
+
+    //Sendng the values to the serial printer for the distance and brightness
+    Serial.print("Distance (cm): ");
+    Serial.print(distance_cm);
+    Serial.print("   Brightness: ");
+    Serial.println(brightness);
+
+    delay(100);  //waiting betweem readings
+    }
     </code></pre>
 
      <div class="assignment">
