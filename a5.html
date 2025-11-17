@@ -101,22 +101,30 @@
       <p>Used this website for reference: https://lastminuteengineers.com/l293d-dc-motor-arduino-tutorial/
         <img src="a5q3.jpg"/></p>
         Here is my pseudocode for how I would set this up:
-        Set up pins for both motor A and motor B
+        Set up pins for both motor A and motor B as outputs
         //Start with both motors forward:
-        Set Motor A forward
-        Set Motor B forward
+        Write Motor A pin 1 HIGH
+        Write Motor A pin 2 LOW
+        Write Motor B pin 1 HIGH
+        Write Motor B pin 2 LOW
         Delay
         //Then both motors backward:
-        Set Motor A backward
-        Set Motor B backward
+        Write Motor A pin 1 LOW
+        Write Motor A pin 2 HIGH
+        Write Motor B pin 1 LOW
+        Write Motor B pin 2 HIGH
         Delay
         //Then Motor A forward, Motor B backward to turn right
-        Set Motor A forward
-        Set Motor B backward
+        Write Motor A pin 1 HIGH
+        Write Motor A pin 2 LOW
+        Write Motor B pin 1 LOW
+        Write Motor B pin 2 HIGH
         Delay
         //Then Motor A backward, Motor B forward to turn left
-        Set Motor A backward
-        Set Motor B forward
+        Write Motor A pin 1 LOW
+        Write Motor A pin 2 HIGH
+        Write Motor B pin 1 HIGH
+        Write Motor B pin 2 LOW
         Delay
       </p>
 
