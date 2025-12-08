@@ -77,3 +77,15 @@ p {
 .assignment p {
   margin-top: 0.5em;
 }
+
+
+.img-row {
+  display: flex;
+  gap: 20px;      
+}
+
+.img-row img {
+  width: 300px;   
+  height: auto;
+  border-radius: 6px;
+}
